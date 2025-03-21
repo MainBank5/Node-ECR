@@ -10,7 +10,7 @@ COPY package*.json ./
 RUN npm install
 #copy remaining files
 COPY . /app/
-#copy .src/ /app/
+
 #expose port
 EXPOSE 3001
 #run command to start app
