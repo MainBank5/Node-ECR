@@ -24,7 +24,7 @@ services:
       - postgres-network
 
   app:
-    build: .
+    image: 343218222156.dkr.ecr.us-east-1.amazonaws.com/list-app:1.1  # Use the ECR image
     container_name: list-app
     restart: always
     depends_on:
@@ -39,4 +39,3 @@ services:
 networks:
   postgres-network:
     driver: bridge
-
