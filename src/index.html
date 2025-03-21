@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Item List</title>
+</head>
+<body>
+    <h1>Item List</h1>
+    
+    <!-- Form to add new items -->
+    <form id="itemForm">
+        <input type="text" id="itemName" placeholder="Enter item name" required>
+        <button type="submit">Add Item</button>
+    </form>
+
+    <ul id="itemsList"></ul>
+
+    <script>
+        const API_URL = "http://localhost:3000/items"; // Ensure correct API endpoint
+
+        document.getElementById("itemForm").addEventListener("submit", async function (e) {
+            e.preventDefault();
+            const itemName = document.getElementById("itemName").value;
+
+            try {
+                const response = await fetch(API_URL, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ name: itemName }),
+                });
+
+                if (!response.ok) {
+                    throw new Error("Failed to add item");
+                }
+
+                document.getElementById("itemName").value = "";
+                loadItems(); // Reload the list
+            } catch (error) {
+                console.error("Error:", error);
+            }
+        });
+
+        async function loadItems() {
+            try {
+                const response = await fetch(API_URL);
+                if (!response.ok) {
+                    throw new Error("Failed to fetch items");
+                }
+
+                const items = await response.json();
+                const itemsList = document.getElementById("itemsList");
+                itemsList.innerHTML = "";
+
+                items.forEach(item => {
+                    const li = document.createElement("li");
+                    li.textContent = item.name;
+                    itemsList.appendChild(li);
+                });
+            } catch (error) {
+                console.error("Error:", error);
+            }
+        }
+
+        loadItems(); // Load items on page load
+    </script>
+</body>
+</html>
